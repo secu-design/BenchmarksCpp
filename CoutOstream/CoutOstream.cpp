@@ -60,6 +60,7 @@ void ostream() {
 int main()
 {
    results << '\n'
+      << "'cout' was used with " << runs << " runs. 'ostream' uses 'cout' just one time for the same output.\n\n"
       << std::setiosflags(std::ios::left)
       << std::setw(15) << "Function"
       << std::setw(15) << "CPU-Time (s)"

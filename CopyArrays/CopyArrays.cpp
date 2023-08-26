@@ -1,3 +1,15 @@
+/*
+* Results:
+* 
+Function       CPU-Time (s)   Percent        Speed factor
+------------------------------------------------------------
+loop copy      6.9019         100            1
+copy()         6.12047        88.68          1.1
+copy_n()       3.98838        57.79          1.7
+cpp_array (=)  2.25756        32.71          3.1
+memcpy()       0.455172       6.59           15.2
+*/
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -6,7 +18,7 @@
 using std::size_t;
 
 constexpr auto n = 100;
-constexpr auto runs = 50'000'000;
+constexpr auto runs = 100'000'000;
 double ref_time;
 
 void PrintResult(
@@ -21,8 +33,8 @@ void PrintResult(
       << std::setfill(' ')
       << std::setw(15) << test_name
       << std::setw(15) << elpsed_seconds.count()
-      << std::setw(15) << trunc(percent * 100) / 100
-      << std::setw(15) << trunc(speed_factor * 10) / 10;
+      << std::setw(15) << round(percent * 100) / 100
+      << std::setw(15) << round(speed_factor * 10) / 10;
 }
 
 void loop() {
@@ -32,7 +44,7 @@ void loop() {
    const auto start = std::chrono::steady_clock::now();
    for (std::size_t i = 0; i < runs; ++i) {
       for (int i = 0; i < n; ++i) {
-         arr2[i] = arr1[i];
+         arr1[i] = arr2[i];
       }
    }
    const auto end = std::chrono::steady_clock::now();
@@ -86,11 +98,11 @@ void memcpy() {
 
 void cpp_array() {
    std::string test_name{ "cpp_array (=)" };
-   std::array<int, n> arr1{}, arr2;
+   std::array<int, n> arr1, arr2{};
 
    const auto start = std::chrono::steady_clock::now();
    for (std::size_t i = 0; i < runs; ++i) {
-      arr2 = arr1;
+      arr1 = arr2;
    }
    const auto end = std::chrono::steady_clock::now();
 
